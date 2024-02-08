@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import SimpleButton from "./components/SimpleButton"
 import DynamicButton from "./components/DynamicButton"
+import { useImmer } from 'use-immer'
 
 const CalculatorBox = styled.div`
   background-color: #1f1f1f;
@@ -12,31 +13,21 @@ const CalculatorBox = styled.div`
 `
 
 export default function Calculator() {
+  const [layout, updateLayout] = useImmer([
+    {type: 'simple', value: 1, blue: false, counter: 7}, {type: 'simple', value: 2, blue: false, counter: 0}, {type: 'simple', value: 3, blue: false, counter: 0}, {type: 'simple', value: '+', blue: true},
+    {type: 'simple', value: 4, blue: false, counter: 0}, {type: 'simple', value: 5, blue: false, counter: 0}, {type: 'simple', value: 6, blue: false, counter: 0}, {type: 'simple', value: '-', blue: true},
+    {type: 'simple', value: 7, blue: false, counter: 0}, {type: 'simple', value: 8, blue: false, counter: 0}, {type: 'simple', value: 9, blue: false, counter: 0}, {type: 'simple', value: 'x', blue: true},
+    {type: 'simple', value: '.'}, {type: 'simple', value: '0', blue: false, counter: 0}, {type: 'simple', value: 'EX', blue: true}, {type: 'simple', value: '/', blue: true},
+    {type: 'dynamic', value: 15, active: false}, {type: 'dynamic', value: 15, active: true}, {type: 'dynamic', value: 15, active: false}, {type: 'dynamic', value: 15, active: false}
+  ])
   return <CalculatorBox>
-
-    <SimpleButton>1</SimpleButton>
-    <SimpleButton>2</SimpleButton>
-    <SimpleButton>3</SimpleButton>
-    <SimpleButton blue>+</SimpleButton>
-
-    <SimpleButton counter='2'>4</SimpleButton>
-    <SimpleButton>5</SimpleButton>
-    <SimpleButton>6</SimpleButton>
-    <SimpleButton blue>-</SimpleButton>
-
-    <SimpleButton>7</SimpleButton>
-    <SimpleButton>8</SimpleButton>
-    <SimpleButton>9</SimpleButton>
-    <SimpleButton blue>x</SimpleButton>
-
-    <div></div>
-    <SimpleButton>0</SimpleButton>
-    <div></div>
-    <SimpleButton blue>/</SimpleButton>
-
-    <DynamicButton active>42</DynamicButton>
-    <DynamicButton onClick={() => alert(123123)} onActivate={() => alert('activating...')}>0</DynamicButton>
-    <DynamicButton>0</DynamicButton>
-    <DynamicButton>0</DynamicButton>
+    { layout.map((element, index) => {
+      if(element.type === 'simple') {
+        return <SimpleButton key={index} blue={element.blue} counter={element.counter}>{element.value}</SimpleButton>
+      } else if(element.type === 'dynamic') {
+        return <DynamicButton key={index} active={element.active}>{element.value}</DynamicButton>
+      }
+    }) }
+    
   </CalculatorBox>
 }

@@ -21,5 +21,5 @@ const Counter = styled.div`
 `
 
 export default function SimpleButton({blue, children, counter = '', onClick = () => {}}) {
-  return <Button onClick={onClick} $blue={blue}>{children}<Counter>{counter}</Counter></Button>
+  return <Button onClick={onClick} $blue={blue}>{children}<Counter>{counter !== 0 ? counter : ''}</Counter></Button>
 }
