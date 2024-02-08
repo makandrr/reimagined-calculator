@@ -41,10 +41,10 @@ const Led = styled.div`
   box-shadow: ${props => props.$active ? '0 0 10px yellow' : 'none'};
 `
 
-export default function DynamicButton({children, active}) {
+export default function DynamicButton({children, active, onClick = () => {}, onActivate = () => {}}) {
   return <div>
-    <Button>{children}</Button>
-    <LedContainer $active={active}>
+    <Button onClick={onClick}>{children}</Button>
+    <LedContainer onClick={onActivate} $active={active}>
       <Led $active={active} />
     </LedContainer>
   </div>

@@ -35,7 +35,7 @@ export default function Calculator() {
     <SimpleButton blue>/</SimpleButton>
 
     <DynamicButton active>42</DynamicButton>
-    <DynamicButton>0</DynamicButton>
+    <DynamicButton onClick={() => alert(123123)} onActivate={() => alert('activating...')}>0</DynamicButton>
     <DynamicButton>0</DynamicButton>
     <DynamicButton>0</DynamicButton>
   </CalculatorBox>
