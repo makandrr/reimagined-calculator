@@ -19,7 +19,7 @@ export default function Calculator() {
     <SimpleButton>3</SimpleButton>
     <SimpleButton blue>+</SimpleButton>
 
-    <SimpleButton>4</SimpleButton>
+    <SimpleButton counter='2'>4</SimpleButton>
     <SimpleButton>5</SimpleButton>
     <SimpleButton>6</SimpleButton>
     <SimpleButton blue>-</SimpleButton>

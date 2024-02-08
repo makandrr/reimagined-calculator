@@ -1,16 +1,25 @@
 import styled from "styled-components"
+import StyledButton from "./StyledButton"
 
-const Button = styled.button`
-  border: 0;
-  width: 4.5rem;
-  height: 4.5rem;
-  font-size: 2.5rem;
-  border-radius: .5rem;
+const Button = styled(StyledButton)`
   background-color: ${props => props.$blue ? '#004a84' : '#28282a'};
-  color: #bfe7f8;
-
+  transition: 100ms all;
+  position: relative;
+  &:hover {
+    background-color: ${props => props.$blue ? '#1f6e9c' : '#535354'};
+  }
+  &:active {
+    background-color: ${props => props.$blue ? '#237bad' : '#626263'};
+  }
 `
 
-export default function SimpleButton({blue, children}) {
-  return <Button $blue={blue}>{children}</Button>
+const Counter = styled.div`
+  font-size: 0.8rem;
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+`
+
+export default function SimpleButton({blue, children, counter = ''}) {
+  return <Button $blue={blue}>{children}<Counter>{counter}</Counter></Button>
 }
