@@ -20,6 +20,6 @@ const Counter = styled.div`
   right: 0.4rem;
 `
 
-export default function SimpleButton({blue, children, counter = '', onClick = () => {}}) {
-  return <Button onClick={onClick} $blue={blue}>{children}<Counter>{counter !== 0 ? counter : ''}</Counter></Button>
+export default function SimpleButton({blue, children, value = children, counter = '', onClick = () => {}}) {
+  return <Button onClick={() => onClick(value)} $blue={blue}>{children}<Counter>{counter !== 0 ? counter : ''}</Counter></Button>
 }

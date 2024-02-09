@@ -7,6 +7,8 @@ import StyledButton from "./StyledButton"
 const Button = styled(StyledButton)`
   background-color: #005230;
   transition: 100ms all;
+  position: relative;
+
   &:hover {
     background-color: #207558;
   }
@@ -41,9 +43,19 @@ const Led = styled.div`
   box-shadow: ${props => props.$active ? '0 0 10px yellow' : 'none'};
 `
 
-export default function DynamicButton({children, active, onClick = () => {}, onActivate = () => {}}) {
+const Counter = styled.div`
+  font-size: 0.8rem;
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+`
+
+export default function DynamicButton({counter = 0, children, value = children, active, onClick = () => {}, onActivate = () => {}}) {
   return <div>
-    <Button onClick={onClick}>{children}</Button>
+    <Button onClick={() => onClick(value)}>
+      <Counter>{counter !== 0 ? counter : ''}</Counter>
+      {value}
+      </Button>
     <LedContainer onClick={onActivate} $active={active}>
       <Led $active={active} />
     </LedContainer>
