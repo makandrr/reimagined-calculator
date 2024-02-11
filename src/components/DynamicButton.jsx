@@ -38,9 +38,10 @@ const LedContainer = styled.button`
 const Led = styled.div`
   width: 6px;
   height: 6px;
-  background-color: ${props => props.$active ? 'yellow' : 'grey'};
+  background-color: ${props => props.$active ? props.$color : 'grey'};
   border-radius: 100%;
-  box-shadow: ${props => props.$active ? '0 0 10px yellow' : 'none'};
+  transition: 150ms all;
+  box-shadow: ${props => props.$active ? '0 0 20px 3px ' + props.$color : 'none'};
 `
 
 const Counter = styled.div`
@@ -50,14 +51,14 @@ const Counter = styled.div`
   right: 0.4rem;
 `
 
-export default function DynamicButton({counter = 0, children, value = children, active, onClick = () => {}, onActivate = () => {}}) {
+export default function DynamicButton({counter = 0, children, value = children, active, onClick = () => {}, onActivate = () => {}, ledColorOverload}) {
   return <div>
     <Button onClick={() => onClick(value)}>
       <Counter>{counter !== 0 ? counter : ''}</Counter>
       {value}
       </Button>
     <LedContainer onClick={onActivate} $active={active}>
-      <Led $active={active} />
+      <Led $active={ledColorOverload ? true : active} $color={ledColorOverload || 'yellow'} />
     </LedContainer>
   </div>
 }

@@ -2,7 +2,7 @@ import styled from "styled-components"
 import SimpleButton from "./components/SimpleButton"
 import DynamicButton from "./components/DynamicButton"
 import { useImmer } from 'use-immer'
-import { useRef } from "react"
+import { useRef, useState } from "react"
 
 const CalculatorBox = styled.div`
   background-color: #1f1f1f;
@@ -21,31 +21,47 @@ export default function Calculator() {
     {type: 'simple', content: 'R', blue: true}, {type: 'simple', content: '0', blue: false, counter: 0}, {type: 'simple', content: 'EX', blue: true}, {type: 'simple', content: '/', blue: true},
     {type: 'dynamic', content: 0, counter: 0, active: false}, {type: 'dynamic', content: 0, counter: 0, active: false}, {type: 'dynamic', content: 0, counter: 0, active: false}, {type: 'dynamic', content: 0, counter: 0, active: false}
   ])
+  const [ledColorOverload, setLedColorOverload] = useState('')
   const activeDButtonsIds = useRef([])
   const currentExpression = useRef('')
   const latestNumButtonPressedId = useRef(0)
+  
 
   function buttonHandler(id, value) {
     if(value === 'EX') {
-      const evaluatedExpression = eval(currentExpression.current)
-      console.log(evaluatedExpression)
-      updateLayout(layout => {
-        activeDButtonsIds.current.forEach(id => {
-          layout[id].content = evaluatedExpression
+      try {
+        if(!currentExpression.current) {
+          layout[id].content = 0
+          return
+        }
+        const evaluatedExpression = eval(currentExpression.current)
+        updateLayout(layout => {
+          activeDButtonsIds.current.forEach(id => {
+            layout[id].content = evaluatedExpression
+          })
         })
-      })
-      currentExpression.current = ''
+      } catch(e) {
+        setLedColorOverload('red')
+        setTimeout(() => {
+          setLedColorOverload('')
+        }, 400)
+      } finally {
+        currentExpression.current = ''
+      }
     } else if(value === 'R') {
       currentExpression.current = ''
       updateLayout(layout => {
         layout[latestNumButtonPressedId.current].counter = 0
       })
+      setLedColorOverload('lime')
+      setTimeout(() => {
+        setLedColorOverload('')
+      }, 400)
     } else {
       currentExpression.current = currentExpression.current + value
     }
 
     if(Number.isFinite(+value)) {
-      console.log(layout[latestNumButtonPressedId.current])
       if(layout[latestNumButtonPressedId.current].content == value) {
         updateLayout(layout => {
           layout[latestNumButtonPressedId.current].counter++
@@ -59,7 +75,6 @@ export default function Calculator() {
         })
       }
     }
-    console.log(currentExpression.current)
   }
 
   function activateDynamicButtonHandler(id) {
@@ -71,7 +86,6 @@ export default function Calculator() {
         buttons[id].active = true
         activeDButtonsIds.current = Array.from(new Set([...activeDButtonsIds.current, id]))
       }
-      console.log(activeDButtonsIds.current)
     })
   }
   return <CalculatorBox>
@@ -79,7 +93,7 @@ export default function Calculator() {
       if(element.type === 'simple') {
         return <SimpleButton key={index} blue={element.blue} counter={element.counter} onClick={(value) => buttonHandler(index, value)} value={element.value}>{element.content}</SimpleButton>
       } else if(element.type === 'dynamic') {
-        return <DynamicButton key={index} active={element.active} onActivate={() => activateDynamicButtonHandler(index)} onClick={(value) => buttonHandler(index, value)} value={element.value} counter={element.counter}>{element.content}</DynamicButton>
+        return <DynamicButton key={index} active={element.active} onActivate={() => activateDynamicButtonHandler(index)} onClick={(value) => buttonHandler(index, value)} value={element.value} counter={element.counter} ledColorOverload={ledColorOverload}>{element.content}</DynamicButton>
       }
     }) }
     
